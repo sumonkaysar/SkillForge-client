@@ -1,5 +1,6 @@
 {
-  "name": "portfolio-client",
+  "name": "skillforge-client",
+  "description": "A comprehensive full-stack portfolio platform featuring project showcases, skills demonstration, blog management system, and interactive resume builder. Built with modern web technologies to provide a seamless user experience for both portfolio visitors and content administrators.",
   "version": "0.1.0",
   "private": true,
   "scripts": {
