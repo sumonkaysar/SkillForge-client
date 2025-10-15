@@ -1,112 +1,86 @@
-// import Logo from "@/components/navbar-components/logo"
-import { Button } from "@/components/ui/button";
-import {
-  NavigationMenu,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-} from "@/components/ui/navigation-menu";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+"use client";
 
-const navigationLinks = [
-  { href: "#", label: "Home", active: true },
-  { href: "#", label: "Features" },
-  { href: "#", label: "Pricing" },
-  { href: "#", label: "About" },
-];
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Menu } from "lucide-react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
 const Navbar = () => {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const navLinks = [
+    { id: "home", label: "Home" },
+    { id: "about", label: "About" },
+    { id: "education", label: "Education" },
+    { id: "skills", label: "Skills" },
+    { id: "projects", label: "Projects" },
+    { id: "contact", label: "Contact" },
+  ];
+
   return (
-    <header className="border-b px-4 md:px-6">
-      <div className="flex h-16 items-center justify-between gap-4">
-        <div className="flex items-center gap-2">
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                className="group size-8 md:hidden"
-                variant="ghost"
-                size="icon"
-              >
-                <svg
-                  className="pointer-events-none"
-                  width={16}
-                  height={16}
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M4 12L20 12"
-                    className="origin-center -translate-y-[7px] transition-all duration-300 ease-[cubic-bezier(.5,.85,.25,1.1)] group-aria-expanded:translate-x-0 group-aria-expanded:translate-y-0 group-aria-expanded:rotate-[315deg]"
-                  />
-                  <path
-                    d="M4 12H20"
-                    className="origin-center transition-all duration-300 ease-[cubic-bezier(.5,.85,.25,1.8)] group-aria-expanded:rotate-45"
-                  />
-                  <path
-                    d="M4 12H20"
-                    className="origin-center translate-y-[7px] transition-all duration-300 ease-[cubic-bezier(.5,.85,.25,1.1)] group-aria-expanded:translate-y-0 group-aria-expanded:rotate-[135deg]"
-                  />
-                </svg>
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent align="start" className="w-36 p-1 md:hidden">
-              <NavigationMenu className="max-w-none *:w-full">
-                <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">
-                  {navigationLinks.map((link, index) => (
-                    <NavigationMenuItem key={index} className="w-full">
-                      <NavigationMenuLink
-                        href={link.href}
-                        className="py-1.5"
-                        active={link.active}
-                      >
-                        {link.label}
-                      </NavigationMenuLink>
-                    </NavigationMenuItem>
-                  ))}
-                </NavigationMenuList>
-              </NavigationMenu>
-            </PopoverContent>
-          </Popover>
-          <div className="flex justify-center items-center gap-6">
-            <a href="#" className="text-primary hover:text-primary/90">
-              Sumon Kaysar
+    <nav
+      className={`sticky top-0 left-0 w-full z-50 transition-all duration-300 ${
+        scrolled
+          ? "backdrop-blur-lg bg-white/10 shadow-lg border-b border-white/10"
+          : "bg-[#211650]"
+      }`}
+    >
+      <div className="container max-w-7xl mx-auto flex justify-between items-center py-4 px-14">
+        <h1 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">
+          <Link href="/">Sumon Kaysar</Link>
+        </h1>
+        <div className="hidden md:flex space-x-6">
+          {navLinks.map((link) => (
+            <a
+              key={link.id}
+              href={`/#${link.id}`}
+              className="text-white hover:text-blue-400 transition-colors duration-300"
+            >
+              {link.label}
             </a>
-          </div>
+          ))}
+          <Link href="/projects">All Projects</Link>
         </div>
-        <NavigationMenu className="max-md:hidden justify-self-end">
-          <NavigationMenuList className="gap-2">
-            {navigationLinks.map((link, index) => (
-              <NavigationMenuItem key={index}>
-                <NavigationMenuLink
-                  active={link.active}
-                  href={link.href}
-                  className="text-muted-foreground hover:text-primary py-1.5 font-medium"
-                >
-                  {link.label}
-                </NavigationMenuLink>
-              </NavigationMenuItem>
-            ))}
-          </NavigationMenuList>
-        </NavigationMenu>
-        <div className="flex items-center gap-2">
-          <Button asChild variant="ghost" size="sm" className="text-sm">
-            <a href="#">Sign In</a>
+        <div className="hidden lg:block">
+          <Button className="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-4 py-2 rounded-full shadow-lg hover:scale-105 transition-transform">
+            Download CV
           </Button>
-          <Button asChild size="sm" className="text-sm">
-            <a href="#">Get Started</a>
-          </Button>
+        </div>
+        <div className="md:hidden flex items-center">
+          <Sheet>
+            <SheetTrigger>
+              <Menu className="text-white" size={28} />
+            </SheetTrigger>
+            <SheetContent className="bg-[#0f0f0f] text-white">
+              <div className="flex flex-col space-y-4 mt-6">
+                <h1 className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600 ml-4 mb-4">
+                  <Link href="/">Sumon Kaysar</Link>
+                </h1>
+                {navLinks.map((link) => (
+                  <a
+                    key={link.id}
+                    href={`/#${link.id}`}
+                    className="text-lg hover:text-blue-400 transition-colors duration-300 ml-10"
+                  >
+                    {link.label}
+                  </a>
+                ))}
+                <Link href="/projects">All Projects</Link>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
       </div>
-    </header>
+    </nav>
   );
 };
 
